@@ -27,43 +27,49 @@ enum custom_keycodes {
     LW_DE_OE,
     LW_DE_UE,
     UPDIR,
-    S_TAB,
 };
 
 #define ADJUST MO(_ADJUST)
-#define SYM_R LT(_SYM, KC_R)
-#define NAV_SPC LT(_NAV, KC_SPC)
-#define NUM MO(_NUM)
+#define LGUI_R LGUI_T(KC_R)
+#define RGUI_SPC RGUI_T(KC_SPC)
+#define LGUI_ESC LGUI_T(KC_ESC)
+#define RGUI_P0 RGUI_T(KC_P0)
+#define NUM_M LT(_NUM, KC_M)
+#define NAV_DOT LT(_NAV, KC_DOT)
 #define FUN MO(_FUN)
 #define MAC TO(_MAC)
 #define LW TO(_LW) // Linux/Windows layer
 #define M_DE OSL(_M_DE)
 #define LW_DE OSL(_LW_DE)
-#define BWD_DEL LALT(KC_BSPC)
 
 // Left-hand home row mods base layer
-#define HOME_S LCTL_T(KC_S)
-#define HOME_N LALT_T(KC_N)
-#define HOME_T LGUI_T(KC_T)
-#define HOME_H LSFT_T(KC_H)
+#define HOME_S LALT_T(KC_S)
+#define HOME_N LCTL_T(KC_N)
+#define HOME_T LSFT_T(KC_T)
+#define HOME_H LT(_SYM, KC_H)
 
 // Right-hand home row mods base layer
-#define HOME_A RSFT_T(KC_A)
-#define HOME_E RGUI_T(KC_E)
-#define HOME_I RALT_T(KC_I)
-#define HOME_C RCTL_T(KC_C)
+#define HOME_A LT(_SYM, KC_A)
+#define HOME_E RSFT_T(KC_E)
+#define HOME_I RCTL_T(KC_I)
+#define HOME_C RALT_T(KC_C)
 
 // Left-hand home row mods sym layer
-#define HOME_EXLM LCTL_T(KC_EXLM)
-#define HOME_BSLS LALT_T(KC_BSLS)
-#define HOME_LPRN LGUI_T(KC_LPRN)
-#define HOME_RPRN LSFT_T(KC_RPRN)
+#define HOME_EXLM LALT_T(KC_EXLM)
+#define HOME_BSLS LCTL_T(KC_BSLS)
+#define HOME_LPRN LSFT_T(KC_LPRN)
 
 // Right-hand home row mods sym layer
-#define HOME_SLSH RSFT_T(KC_SLSH)
-#define HOME_UNDS RGUI_T(KC_UNDS)
-#define HOME_EQL RALT_T(KC_EQL)
-#define HOME_QUES LCTL_T(KC_QUES)
+#define HOME_DQUO RSFT_T(KC_DQUO)
+#define HOME_UNDS RCTL_T(KC_UNDS)
+#define HOME_QUES RALT_T(KC_QUES)
+
+// Replace Option + ⌫ with Ctrl + ⌫ for Linux/Windows
+const key_override_t delete_word_key_override = ko_make_with_layers(MOD_MASK_ALT, KC_BSPC, C(KC_BSPC), ~_LW);
+// Replace Option + ⌦ with Ctrl + ⌦ for Linux/Windows
+const key_override_t delete_forward_word_key_override = ko_make_with_layers(MOD_MASK_ALT, KC_DEL, C(KC_DEL), ~_LW);
+
+const key_override_t* key_overrides[] = {&delete_word_key_override, &delete_forward_word_key_override};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -71,13 +77,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Base Layer: Mac
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  Tab   |   F  |   P  |   D  |   L  |   X  |                              |   ;  |   U  |   O  |   Y  |   B  |   Z    |
+ * |  ____  |   F  |   P  |   D  |   L  |   X  |                              |   ;  |   U  |   O  |   Y  |   B  |   Z    |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |  BSpc  |LCtl S|LAlt N|LGui T|LSft H|   K  |                              |   ,  |RSft A|RGui E|RAlt I|RCtl C|   Q    |
+ * |  ____  |LAlt S|LCtl N|LSft T| Sym H|   K  |                              |   ,  | Sym A|RSft E|RCtl I|RAlt C|   Q    |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |  \     |   V  |   W  |   G  |   M  |   J  | ____ |Adjust|  | Lock | ____ |   -  |   .  |   '  |   =  |  DE  | Enter  |
+ * |  ____  |   V  |   W  |   G  | Num M|   J  | ____ |Adjust|  | Lock | ____ |   -  | Nav .|   '  |   =  |  DE  |  ____  |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | ____ | ____ | Num  | Sym  | ____ |  | ____ | Nav  | Fun  | ____ | ____ |
+ *                        | ____ | ____ | ARep | LGui | ____ |  | ____ | RGui | Rep  | ____ | ____ |
  *                        |      |      |      | R    |      |  |      | Space|      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
@@ -85,10 +91,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------'                                              `-----------------------------------'
  */
     [_MAC] = LAYOUT_split_3x6_5_hlc(
-     KC_TAB  , KC_F    , KC_P    , KC_D    , KC_L    , KC_X    ,                                         KC_SCLN , KC_U    , KC_O    , KC_Y    , KC_B    , KC_Z    ,
-     KC_BSPC , HOME_S  , HOME_N  , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , HOME_I  , HOME_C  , KC_Q    ,
-     KC_BSLS , KC_V    , KC_W    , KC_G    , KC_M    , KC_J    , KC_NO   , ADJUST  , M_LOCK  , KC_NO   , KC_MINS , KC_DOT  , KC_QUOT , KC_EQL  , M_DE    , KC_ENT  ,
-                                   KC_NO   , KC_NO   , NUM     , SYM_R   , KC_NO   , KC_NO   , NAV_SPC , FUN     , KC_NO   , KC_NO   ,
+     KC_NO   , KC_F    , KC_P    , KC_D    , KC_L    , KC_X    ,                                         KC_SCLN , KC_U    , KC_O    , KC_Y    , KC_B    , KC_Z    ,
+     KC_NO   , HOME_S  , HOME_N  , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , HOME_I  , HOME_C  , KC_Q    ,
+     KC_NO   , KC_V    , KC_W    , KC_G    , NUM_M   , KC_J    , KC_NO   , ADJUST  , M_LOCK  , KC_NO   , KC_MINS , NAV_DOT , KC_QUOT , KC_EQL  , M_DE    , KC_NO   ,
+                                   KC_NO   , KC_NO   , QK_AREP , LGUI_R  , KC_NO   , KC_NO   , RGUI_SPC, QK_REP  , KC_NO   , KC_NO   ,
      KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                                             KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO
     ),
 
@@ -96,13 +102,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Base Layer: Linux/Windows
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  Tab   |   F  |   P  |   D  |   L  |   X  |                              |   ;  |   U  |   O  |   Y  |   B  |   Z    |
+ * |  ____  |   F  |   P  |   D  |   L  |   X  |                              |   ;  |   U  |   O  |   Y  |   B  |   Z    |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |  BSpc  |LCtl S|LAlt N|LGui T|LSft H|   K  |                              |   ,  |RSft A|RGui E|RAlt I|RCtl C|   Q    |
+ * |  ____  |LAlt S|LCtl N|LSft T| Sym H|   K  |                              |   ,  | Sym A|RSft E|RCtl I|RAlt C|   Q    |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |  \     |   V  |   W  |   G  |   M  |   J  | ____ |Adjust|  | Lock | ____ |   -  |   .  |   '  |   =  |  DE  | Enter  |
+ * |  ____  |   V  |   W  |   G  | Num M|   J  | ____ |Adjust|  | Lock | ____ |   -  | Nav .|   '  |   =  |  DE  |  ____  |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | ____ | ____ | Num  | Sym  | ____ |  | ____ | Nav  | Fun  | ____ | ____ |
+ *                        | ____ | ____ | ARep | LGui | ____ |  | ____ | RGui | Rep  | ____ | ____ |
  *                        |      |      |      | R    |      |  |      | Space|      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
@@ -110,10 +116,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------'                                              `-----------------------------------'
  */
     [_LW] = LAYOUT_split_3x6_5_hlc(
-     KC_TAB  , KC_F    , KC_P    , KC_D    , KC_L    , KC_X    ,                                         KC_SCLN , KC_U    , KC_O    , KC_Y    , KC_B    , KC_Z    ,
-     KC_BSPC , HOME_S  , HOME_N  , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , HOME_I  , HOME_C  , KC_Q    ,
-     KC_BSLS , KC_V    , KC_W    , KC_G    , KC_M    , KC_J    , KC_NO   , ADJUST  , LW_LOCK , KC_NO   , KC_MINS , KC_DOT  , KC_QUOT , KC_EQL  , LW_DE   , KC_ENT  ,
-                                   KC_NO   , KC_NO   , NUM     , SYM_R   , KC_NO   , KC_NO   , NAV_SPC , FUN     , KC_NO   , KC_NO   ,
+     KC_NO   , KC_F    , KC_P    , KC_D    , KC_L    , KC_X    ,                                         KC_SCLN , KC_U    , KC_O    , KC_Y    , KC_B    , KC_Z    ,
+     KC_NO   , HOME_S  , HOME_N  , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , HOME_I  , HOME_C  , KC_Q    ,
+     KC_NO   , KC_V    , KC_W    , KC_G    , NUM_M   , KC_J    , KC_NO   , ADJUST  , LW_LOCK , KC_NO   , KC_MINS , NAV_DOT , KC_QUOT , KC_EQL  , LW_DE   , KC_NO   ,
+                                   KC_NO   , KC_NO   , QK_AREP , LGUI_R  , KC_NO   , KC_NO   , RGUI_SPC, QK_REP  , KC_NO   , KC_NO   ,
      KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                                             KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO
     ),
 
@@ -123,9 +129,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |    ^   |   #  |   *  |   [  |   ]  |   &  |                              |   ;  |   <  |   >  |   @  |   ~  |    `   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |LCtl !|LAlt \|LGui (|LSft )|   :  |                              |   ,  |RSft /|RGui _|RAlt =|RCtl ?|  ____  |
+ * |        |LAlt !|LCtl \|LSft (|   )  |   :  |                              |   ,  |   /  |RSft "|RCtl _|RAlt ?|  ____  |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   %  |   $  |   {  |   }  |   |  |      |      |  |      |      |   -  |   .  |   '  |   "  |   +  |        |
+ * |        |   %  |   $  |   {  |   }  |   |  |      |      |  |      |      |   -  |   .  |   '  |   =  |   +  |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
@@ -136,8 +142,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_SYM] = LAYOUT_split_3x6_5_hlc(
      KC_CIRC , KC_HASH , KC_ASTR , KC_LBRC , KC_RBRC , KC_AMPR ,                                         KC_SCLN , KC_LABK , KC_RABK , KC_AT   , KC_TILD , KC_GRV  ,
-     _______ ,HOME_EXLM,HOME_BSLS,HOME_LPRN,HOME_RPRN, KC_COLN ,                                         KC_COMM ,HOME_SLSH,HOME_UNDS ,HOME_EQL,HOME_QUES, KC_NO   ,
-     _______ , KC_PERC , KC_DLR  , KC_LCBR , KC_RCBR , KC_PIPE , _______ , _______ , _______ , _______ , KC_MINS , KC_DOT  , KC_QUOT , KC_DQUO , KC_PLUS , _______ ,
+     _______ ,HOME_EXLM,HOME_BSLS,HOME_LPRN, KC_RPRN , KC_COLN ,                                         KC_COMM , KC_SLSH ,HOME_DQUO,HOME_UNDS,HOME_QUES, KC_NO   ,
+     _______ , KC_PERC , KC_DLR  , KC_LCBR , KC_RCBR , KC_PIPE , _______ , _______ , _______ , _______ , KC_MINS , KC_DOT  , KC_QUOT , KC_EQL  , KC_PLUS , _______ ,
                                    _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
     ),
@@ -146,24 +152,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Nav
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  ____  | ____ | ____ | ____ | ____ | ____ |                              | ____ | ____ |   ↑  | ____ | ____ |  ____  |
+ * |  ____  | ____ |   ⌦  |   ↑  |   ⌫  | ____ |                              | ____ | ____ | ____ | ____ | ____ |  ____  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |Bwd Del | LCtl | LAlt | LGui | LSft | ____ |                              | STab |  ←   |   ↓  |   →  | Tab  | Delete |
+ * |        | ____ |   ←  |   ↓  |   →  |  Tab |                              | ____ | ____ | RSft | RCtl | RAlt |  ____  |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        | ____ | ____ | ____ | ____ | ____ |      |      |  |      |      | ____ | ____ | ____ | ____ | ____ |        |
+ * |        | ____ | ____ | ____ |Enter | ____ |      |      |  |      |      | ____ | ____ | ____ | ____ | ____ |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      | Esc  | LLck |  |      |      |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      | LGui | LLck |  |      |      |      |      |      |
+ *                        |      |      |      | Esc  |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
  * |      |      |       |      |      |                                              |      |      |       |      |      |
  * `-----------------------------------'                                              `-----------------------------------'
  */
     [_NAV] = LAYOUT_split_3x6_5_hlc(
-     KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                         KC_NO   , KC_NO   , KC_UP   , KC_NO   , KC_NO   , KC_NO   ,
-     BWD_DEL , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , KC_NO   ,                                         S_TAB   , KC_LEFT , KC_DOWN , KC_RGHT , KC_TAB  , KC_DEL  ,
-     _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ , _______ , _______ , _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ ,
-                                   _______ , _______ , _______ , KC_ESC  , QK_LLCK , _______ , _______ , _______ , _______ , _______ ,
+     KC_NO   , KC_NO   , KC_DEL  , KC_UP   , KC_BSPC , KC_NO   ,                                         KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,
+     _______ , KC_NO   , KC_LEFT , KC_DOWN , KC_RGHT , KC_TAB  ,                                         KC_NO   , KC_NO   , KC_RSFT , KC_RCTL , KC_RALT , KC_NO   ,
+     _______ , KC_NO   , KC_NO   , KC_NO   , KC_ENT  , KC_NO   , _______ , _______ , _______ , _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ ,
+                                   _______ , _______ , _______ , LGUI_ESC, QK_LLCK , _______ , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
     ),
 
@@ -173,12 +179,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |  ____  | ____ | ____ | ____ | ____ | ____ |                              |   /  |   4  |   5  |   6  |   +  |    *   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | LCtl | LAlt | LGui | LSft | ____ |                              |   :  |   1  |   2  |   3  |   -  |    =   |
+ * |        | LAlt | LCtl | LSft | ____ | ____ |                              |   :  |   1  |   2  |   3  |   -  |    =   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        | ____ | ____ | ____ | ____ | ____ |      |      |  |      |      |   ,  |   7  |   8  |   9  |   .  |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |      |  | LLck |  0   |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      | LLck |  | Fun  | RGui |      |      |      |
+ *                        |      |      |      |      |      |  |      |   0  |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
  * |      |      |       |      |      |                                              |      |      |       |      |      |
@@ -186,9 +192,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_NUM] = LAYOUT_split_3x6_5_hlc(
      KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                         KC_PSLS , KC_P4   , KC_P5   , KC_P6   , KC_PPLS , KC_PAST ,
-     _______ , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , KC_NO   ,                                         KC_COLN , KC_P1   , KC_P2   , KC_P3   , KC_PMNS , KC_PEQL ,
+     _______ , KC_LALT , KC_LCTL , KC_LSFT , KC_NO   , KC_NO   ,                                         KC_COLN , KC_P1   , KC_P2   , KC_P3   , KC_PMNS , KC_PEQL ,
      _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ , _______ , _______ , _______ , KC_COMM , KC_P7   , KC_P8   , KC_P9   , KC_PDOT , _______ ,
-                                   _______ , _______ , _______ , _______ , _______ , QK_LLCK , KC_P0   , _______ , _______ , _______ ,
+                                   _______ , _______ , _______ , _______ , QK_LLCK ,OSL(_FUN), RGUI_P0 , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
     ),
 
@@ -198,7 +204,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |  ____  | ____ | ____ | ____ | ____ | ____ |                              | ____ |  F4  |  F5  |  F6  |  F10 |  ____  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | LCtl | LAlt | LGui | LSft | ____ |                              | ____ |  F1  |  F2  |  F3  |  F11 |        |
+ * |        | LAlt | LCtl | LSft | ____ | ____ |                              | ____ |  F1  |  F2  |  F3  |  F11 |  ____  |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        | ____ | ____ | ____ | ____ | ____ |      |      |  |      |      | ____ |  F7  |  F8  |  F9  |  F12 |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -210,8 +216,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------'                                              `-----------------------------------'
  */
     [_FUN] = LAYOUT_split_3x6_5_hlc(
-     _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                         KC_NO   , KC_F4   , KC_F5   , KC_F6   , KC_F10  , KC_NO   ,
-     _______ , KC_LCTL , KC_LALT , KC_LGUI , KC_LSFT , KC_NO   ,                                         KC_NO   , KC_F1   , KC_F2   , KC_F3   , KC_F11  , _______ ,
+     KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                         KC_NO   , KC_F4   , KC_F5   , KC_F6   , KC_F10  , KC_NO   ,
+     _______ , KC_LALT , KC_LCTL , KC_LSFT , KC_NO   , KC_NO   ,                                         KC_NO   , KC_F1   , KC_F2   , KC_F3   , KC_F11  , KC_NO   ,
      _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ , _______ , _______ , _______ , KC_NO   , KC_F7   , KC_F8   , KC_F9   , KC_F12  , _______ ,
                                    _______ , _______ , _______ , _______ , QK_LLCK , _______ , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
@@ -248,7 +254,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |      |      |      |      |      |                              |      |   Ü  |   Ö  |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |   ß  |      |      |LShift|      |                              |      |   Ä  |      |      |      |        |
+ * |        |   ß  |      |LShift|      |      |                              |      |   Ä  |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -261,7 +267,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_M_DE] = LAYOUT_split_3x6_5_hlc(
      _______ , _______ , _______ , _______ , _______ , _______ ,                                         _______ , M_DE_UE , M_DE_OE , _______ , _______ , _______ ,
-     _______ , DE_S    , _______ , _______ , KC_LSFT , _______ ,                                         _______ , M_DE_AE , _______ , _______ , _______ , _______ ,
+     _______ , DE_S    , _______ , KC_LSFT , _______ , _______ ,                                         _______ , M_DE_AE , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
                                    _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
@@ -273,7 +279,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |      |      |      |      |      |                              |      |   Ü  |   Ö  |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |   ß  |      |      |LShift|      |                              |      |   Ä  |      |      |      |        |
+ * |        |   ß  |      |LShift|      |      |                              |      |   Ä  |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
@@ -286,7 +292,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_LW_DE] = LAYOUT_split_3x6_5_hlc(
      _______ , _______ , _______ , _______ , _______ , _______ ,                                         _______ ,LW_DE_UE ,LW_DE_OE , _______ , _______ , _______ ,
-     _______ , DE_S    , _______ , _______ , KC_LSFT , _______ ,                                         _______ ,LW_DE_AE , _______ , _______ , _______ , _______ ,
+     _______ , DE_S    , _______ , KC_LSFT , _______ , _______ ,                                         _______ ,LW_DE_AE , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
                                    _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
@@ -336,13 +342,6 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 }
 
 bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
-    switch (tap_hold_keycode) {
-        case NAV_SPC:
-        case SYM_R:
-            return true;
-            break;
-    }
-
     if (other_record->event.key.row % (MATRIX_ROWS / 2) >= 3) {
         return true;
     }
@@ -396,27 +395,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 return false;
             }
             break;
-        case HOME_RPRN:
+        case HOME_DQUO:
             if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_RPRN);
-                return false;
-            }
-            break;
-        case HOME_SLSH:
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_SLSH);
+                tap_code16(KC_DQUO);
                 return false;
             }
             break;
         case HOME_UNDS:
             if (record->tap.count && record->event.pressed) {
                 tap_code16(KC_UNDS);
-                return false;
-            }
-            break;
-        case HOME_EQL:
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_EQL);
                 return false;
             }
             break;
@@ -435,6 +422,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                     unregister_code(KC_LSFT);
                 } else {
                     tap_code(KC_A);
+                }
+                if (record->event.pressed) {
+                    tap_code16(QK_RALT | KC_Q);
                 }
                 return false;
             }
@@ -495,14 +485,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 tap_code16(QK_LGUI | KC_L);
             }
             break;
-        case S_TAB:
-            if (record->event.pressed) {
-                tap_code16(QK_LSFT | KC_TAB);
-            }
-            break;
         case UPDIR:
             if (record->event.pressed) {
                 SEND_STRING("./");
+            }
+            break;
+        case MAC:
+            if (record->event.pressed) {
+                set_single_default_layer(_MAC);
+                keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
+            }
+            break;
+        case LW:
+            if (record->event.pressed) {
+                set_single_default_layer(_LW);
+                keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = true;
             }
             break;
     }
