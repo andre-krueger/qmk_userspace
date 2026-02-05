@@ -5,11 +5,11 @@
 bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_UNDS:
-        case SYM_COLN:
-        case KC_DOT:
+        case BTM_DOT:
+        case KC_COLN:
         case HOME_DQT:
-        case KC_QUOT:
-        case KC_EQL:
+        case BTM_QUOT:
+        case BTM_EQL:
         case HOME_AMPR:
         case KC_PIPE:
         case KC_GRV:
@@ -17,7 +17,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
         case KC_RABK:
         case KC_0:
         case KC_BSLS:
-        case KC_SLSH:
+        case BTM_SLSH:
         case HOME_EXLM:
         case HOME_HASH:
         case COPY_CUT:
@@ -25,6 +25,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
         case DE_AE:
         case DE_UE:
         case DE_OE:
+        case KC_EQL:
         case KC_QUES:
             return true;
         default:
@@ -41,7 +42,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
                 send_string("__");
             }
             break;
-        case SYM_COLN:
+        case KC_COLN:
             if (!shifted) {
                 tap_code16(KC_COLN);
             } else {
@@ -62,7 +63,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
                 send_string("!=");
             }
             break;
-        case KC_QUOT:
+        case BTM_QUOT:
             if (!shifted) {
                 tap_code16(KC_QUOT);
             } else {
@@ -104,7 +105,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
                 send_string("\\");
             }
             break;
-        case KC_SLSH:
+        case BTM_SLSH:
             if (!shifted) {
                 tap_code16(KC_SLSH);
             } else {
@@ -123,6 +124,13 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
                 tap_code16(KC_QUES);
             } else {
                 send_string("??");
+            }
+            break;
+        case BTM_EQL:
+            if (!shifted) {
+                tap_code16(KC_EQL);
+            } else {
+                send_string("==");
             }
             break;
         case HOME_AMPR:
@@ -146,7 +154,7 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
                 send_string("000");
             }
             break;
-        case KC_DOT:
+        case BTM_DOT:
             if (!shifted) {
                 tap_code16(KC_DOT);
             } else {

@@ -1,10 +1,10 @@
 layout: { qmk_keyboard: splitkb/halcyon/kyria/rev4, layout_name: LAYOUT_split_3x6_5_hlc }
 layers:
   Base:
-    - [ '', F, P, { t: D, h: LSFT }, { t: L, h: De }, X, ';', { t: U, h: Fun }, { t: O, h: RSFT }, Y ]
-    - [ B, Z, '⌫', { t: S, h: LALT }, { t: N, h: LCTL }, { t: T, h: Nav }, { t: H, h: LGUI }, K, ',', { t: A, h: RGUI } ]
-    - [ { t: E, h: Num }, { t: I, h: RCTL }, { t: C, h: LALT }, Q, '', V, W, G, M, J ]
-    - [ '', Adjust, LOCK, '', '-', ., /, '=', '''', ENT ]
+    - [ '', F, P, D, { t: L, h: De }, X, ';', { t: U, h: Fun }, O, Y ]
+    - [ B, Z, '⌫', S, N, { t: T, h: Nav }, { t: H, h: Sym }, K, ',', { t: A, h: Sym } ]
+    - [ { t: E, h: Num }, I, C, Q, '', { t: V, h: LALT }, { t: W, h: LCTL }, { t: G, h: LSFT }, { t: M, h: LGUI }, J ]
+    - [ '', Adjust, LOCK, '', '-', { t: ., h: RGUI }, { t: /, h: RSFT }, { t: '=', h: RCTL }, { t: '''', h: LALT }, ENT ]
     - [ '', '', { s: OSM, t: LSFT }, R, '', '_', SPC, { s: OSM, t: RSFT }, '', '' ]
     - [ MUTE, '', '', '', '', MUTE, '', '', '', '' ]
   Sym:
@@ -23,12 +23,12 @@ layers:
       - { t: ▽, type: trans }
       - { t: '#', h: LALT }
       - { t: '!', h: LCTL }
-      - '%'
+      - { t: '%', h: Nav }
       - '*'
       - ''
       - { t: ▽, type: trans }
       - '('
-    - - ')'
+    - - { t: ')', h: Num }
       - { t: '&', h: RCTL }
       - { t: '"', h: LALT }
       - ''
@@ -74,7 +74,7 @@ layers:
       - '9'
       - '8'
       - '7'
-      - 'X'
+      - X
       - { t: ▽, type: trans }
       - ''
       - { t: ▽, type: trans }
@@ -200,8 +200,8 @@ layers:
       - ''
       - ''
       - RSFT
-      - ''
-    - - ''
+      - RCTL
+    - - LALT
       - ''
       - { t: ▽, type: trans }
       - F10
@@ -210,10 +210,10 @@ layers:
       - F1
       - ''
       - ''
-      - RGUI
+      - ''
     - - ''
-      - RCTL
-      - LALT
+      - ''
+      - ''
       - ''
       - { t: ▽, type: trans }
       - F11
@@ -226,7 +226,7 @@ layers:
       - { t: ▽, type: trans }
       - { t: ▽, type: trans }
       - ''
-      - RSFT
+      - ''
       - ''
       - ''
       - ''
@@ -383,8 +383,8 @@ combos:
   - { p: [ 8, 9 ], k: { t: '$' } }
   - { p: [ 16, 19 ], k: { t: 'XCase' } }
   - { p: [ 15, 20 ], k: { t: 'XCase CapsWord' } }
-  - { p: [ 15, 16 ], k: { t: TAB, h: Sym } }
-  - { p: [ 19, 20 ], k: { t: ':', h: Sym } }
+  - { p: [ 15, 16 ], k: TAB }
+  - { p: [ 19, 20 ], k: ':' }
   - { p: [ 20, 21 ], k: { t: '?' } }
   - { p: [ 36, 37 ], k: { t: '\' } }
   - { p: [ 9, 21 ], k: { t: '|>' } }

@@ -16,18 +16,18 @@ void keyboard_post_init_user(void) {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_MAC] = LAYOUT_split_3x6_5_hlc(
-     KC_NO   , KC_F    , KC_P    , SFT_D   , DE_L    , KC_X    ,                                         KC_SCLN , FUN_U   , SFT_O   , KC_Y    , KC_B    , KC_Z    ,
-     KC_BSPC , HOME_S  , HOME_N  , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , HOME_I  , HOME_C  , KC_Q    ,
-     KC_BSLS , KC_V    , KC_W    , KC_G    , KC_M    , KC_J    , KC_NO   , ADJUST  , LOCK    , KC_NO   , KC_MINS , KC_DOT  , KC_SLSH , KC_EQL  , KC_QUOT , KC_ENT  ,
+     KC_NO   , KC_F    , KC_P    , KC_D    , DE_L    , KC_X    ,                                         KC_SCLN , FUN_U   , KC_O    , KC_Y    , KC_B    , KC_Z    ,
+     KC_BSPC , KC_S    , KC_N    , HOME_T  , HOME_H  , KC_K    ,                                         KC_COMM , HOME_A  , HOME_E  , KC_I    , KC_C    , KC_Q    ,
+     KC_NO   , BTM_V   , BTM_W   , BTM_G   , BTM_M   , KC_J    , KC_NO   , ADJUST  , LOCK    , KC_NO   , KC_MINS , BTM_DOT , BTM_SLSH, BTM_EQL , BTM_QUOT, KC_ENT  ,
                                    KC_NO   , KC_NO   , OSM_LSFT, KC_R    , KC_NO   , KC_UNDS , KC_SPC  , OSM_RSFT, KC_NO   , KC_NO   ,
      KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,                                                             KC_MUTE , KC_NO   , KC_NO   , KC_NO   , KC_NO
     ),
 
     [_SYM] = LAYOUT_split_3x6_5_hlc(
-     _______ , KC_NO   , KC_AT   , KC_LABK , KC_RABK , KC_NO   ,                                         _______ , KC_LCBR, KC_RCBR  , KC_PIPE , KC_GRV  , KC_NO   ,
-     _______ ,HOME_HASH,HOME_EXLM,HOME_PERC,HOME_ASTR, KC_NO   ,                                         _______ ,HOME_LPRN,HOME_RPRN,HOME_AMPR, HOME_DQT, KC_NO   ,
+     _______ , KC_NO   , KC_AT   , KC_LABK , KC_RABK , KC_NO   ,                                         _______ , KC_LCBR , KC_RCBR , KC_PIPE , KC_GRV  , KC_NO   ,
+     _______ ,HOME_HASH,HOME_EXLM,HOME_PERC, KC_ASTR , KC_NO   ,                                         _______ , KC_LPRN ,HOME_RPRN,HOME_AMPR, HOME_DQT, KC_NO   ,
      _______ , KC_TILD , KC_PLUS , KC_LBRC , KC_RBRC , KC_NO   , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ ,
-                                   _______ , _______ , _______ , KC_LGUI , KC_NO   , _______ , RGUI_SPC, _______ , _______ , _______ ,
+                                   _______ , _______ , _______ , KC_LGUI , _______ , _______ , RGUI_SPC, _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
     ),
 
@@ -48,8 +48,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_FUN] = LAYOUT_split_3x6_5_hlc(
-     _______ , KC_F12  , KC_F9   , KC_F8   , KC_F7   , KC_NO   ,                                         KC_NO   , KC_NO   , KC_RSFT , KC_NO   , KC_NO   , KC_NO   ,
-     _______ , KC_F10  , KC_F3   , KC_F2   , KC_F1   , KC_NO   ,                                         KC_NO   , KC_RGUI , KC_NO   , KC_RCTL , KC_LALT , KC_NO   ,
+     _______ , KC_F12  , KC_F9   , KC_F8   , KC_F7   , KC_NO   ,                                         KC_NO   , KC_NO   , KC_RSFT , KC_RCTL , KC_LALT , KC_NO   ,
+     _______ , KC_F10  , KC_F3   , KC_F2   , KC_F1   , KC_NO   ,                                         KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,
      _______ , KC_F11  , KC_F6   , KC_F5   , KC_F4   , KC_NO   , _______ , _______ , _______ , _______ , KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   , _______ ,
                                    _______ , _______ , _______ , _______ , QK_LLCK , _______ , KC_RGUI , _______ , _______ , _______ ,
      _______ , _______ , _______ , _______ , _______ ,                                                             _______ , _______ , _______ , _______ , _______
@@ -148,6 +148,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             }
             break;
+        case HOME_PERC:
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_PERC);
+                return false;
+            }
+            break;
+        case HOME_RPRN:
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(KC_RPRN);
+                return false;
+            }
+            break;
         case LARGE_RIGHT_ARROW:
             if (record->event.pressed) {
                 del_mods(MOD_MASK_CSAG);
@@ -198,18 +210,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 add_oneshot_mods(one_shot_mod_state);
             }
             break;
-        case HOME_HASH:
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_HASH);
-                return false;
-            }
-            break;
-        case HOME_AMPR:
-            if (record->tap.count && record->event.pressed) {
-                tap_code16(KC_AMPR);
-                return false;
-            }
-            break;
         case ELVIS_OPERATOR:
             if (record->event.pressed) {
                 send_string("?:");
@@ -256,20 +256,20 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
                       uint16_t other_keycode, keyrecord_t* other_record) {
     switch (tap_hold_keycode) {
         case HOME_T:
-            if (other_keycode == KC_M) {
+            if (other_keycode == BTM_M) {
                 return true;
             }
             break;
 
         case HOME_E:
-            if (other_keycode == KC_DOT) {
+            if (other_keycode == BTM_DOT) {
                 return true;
             }
             break;
 
         case DE_L:
-            if (other_keycode == SFT_D || other_keycode == KC_F || other_keycode == HOME_S ||
-                other_keycode == KC_V) {
+            if (other_keycode == KC_D || other_keycode == KC_F || other_keycode == KC_S ||
+                other_keycode == BTM_V) {
                 return true;
             }
             break;

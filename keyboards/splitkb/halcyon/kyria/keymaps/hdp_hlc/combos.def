@@ -1,27 +1,27 @@
-COMB(C_UNDO,                    UNDO,                     KC_M, KC_W)
-COMB(C_COPY_CUT,                COPY_CUT,                 KC_W, KC_G)
-COMB(C_PASTE_PASTE_SPECIAL,     PASTE_PASTE_SPECIAL,      KC_G, KC_M)
-COMB(C_REDO,                    REDO,                     KC_W, KC_G, KC_M)
+COMB(C_UNDO,                    UNDO,                     BTM_M, BTM_W)
+COMB(C_COPY_CUT,                COPY_CUT,                 BTM_W, BTM_G)
+COMB(C_PASTE_PASTE_SPECIAL,     PASTE_PASTE_SPECIAL,      BTM_G, BTM_M)
+COMB(C_REDO,                    REDO,                     BTM_W, BTM_G, BTM_M)
 
-COMB(C_TAB,                     KC_TAB,                   HOME_N, HOME_T)
+COMB(C_TAB,                     KC_TAB,                   KC_N, HOME_T)
 
-COMB(C_QUES,                    KC_QUES,                  HOME_E, HOME_I)
-COMB(C_BSLS,                    KC_BSLS,                  KC_SLSH, KC_EQL)
+COMB(C_QUES,                    KC_QUES,                  HOME_E, KC_I)
+COMB(C_BSLS,                    KC_BSLS,                  BTM_SLSH, BTM_EQL)
 COMB(C_CIRC,                    KC_CIRC,                  FUN_U, KC_O)
-COMB(C_DLR,                     KC_DLR,                   SFT_O, KC_Y)
+COMB(C_DLR,                     KC_DLR,                   KC_O, KC_Y)
 
 COMB(C_XCASE,                   XCASE,                    HOME_H, HOME_A)
 
 COMB(C_CAPSWORD,                CAPSWORD,                 HOME_T, HOME_E)
 
-COMB(C_SYM_ESC,                 SYM_ESC,                  HOME_T, HOME_H)
-COMB(C_SYM_COLN,                SYM_COLN,                 HOME_A, HOME_E)
+COMB(C_ESC,                     KC_ESC,                   HOME_T, HOME_H)
+COMB(C_COLN,                    KC_COLN,                  HOME_A, HOME_E)
 
-COMB(C_ELVIS_OPERATOR,          ELVIS_OPERATOR,           HOME_A, HOME_E, HOME_I)
+COMB(C_ELVIS_OPERATOR,          ELVIS_OPERATOR,           HOME_A, HOME_E, KC_I)
 
-COMB(C_LARGE_RIGHT_ARROW,       LARGE_RIGHT_ARROW,        SFT_O, HOME_E)
+COMB(C_LARGE_RIGHT_ARROW,       LARGE_RIGHT_ARROW,        KC_O, HOME_E)
 COMB(C_SMALL_RIGHT_ARROW,       SMALL_RIGHT_ARROW,        FUN_U, HOME_A)
-COMB(C_SMALL_LEFT_ARROW,        SMALL_LEFT_ARROW,         SFT_D, HOME_T)
-COMB(C_PIPE_TO,                 PIPE_TO,                  KC_Y, HOME_I)
+COMB(C_SMALL_LEFT_ARROW,        SMALL_LEFT_ARROW,         KC_D, HOME_T)
+COMB(C_PIPE_TO,                 PIPE_TO,                  KC_Y, KC_I)
 COMB(C_LESS_THAN,               LESS_THAN,                DE_L, HOME_H)
-COMB(C_GREATER_THAN,            GREATER_THAN,             HOME_H, KC_M)
+COMB(C_GREATER_THAN,            GREATER_THAN,             HOME_H, BTM_M)
